@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import createGlobe from 'cobe';
 import { DEFAULT_CITIES } from '../../../lib/cities';
-import { useRouter } from 'next/navigation';
+import { redirect, RedirectType, useRouter } from 'next/navigation';
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -10,6 +10,10 @@ export default function HomePage() {
   const handleClick = () => {
     router.push('/polution');
   };
+  const handleClickHeat = () =>{{
+    //https://cathi-nonengrossing-janiyah.ngrok-free.dev/
+    redirect('http://192.168.30.248:5006/', RedirectType.push)
+  }}
   const handleAbout = () => {
     router.push('/about');
   };
@@ -151,7 +155,7 @@ export default function HomePage() {
               {/* Heat Map Card */}
               <div
                 className="relative rounded-2xl overflow-hidden h-44 md:h-52 lg:h-56 transform hover:scale-105 hover:-translate-y-2 transition-all duration-700 ease-out shadow-xl cursor-pointer group"
-                onClick={handleClick}
+                onClick={handleClickHeat}
                 style={{ animation: 'fadeInUp 0.6s ease-out 0.4s backwards' }}
               >
                 <img
