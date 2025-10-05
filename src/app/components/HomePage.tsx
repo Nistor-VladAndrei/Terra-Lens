@@ -5,21 +5,34 @@ import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const router = useRouter(); // Next.js router hook
+  const router = useRouter();
 
   const handleClick = () => {
-    router.push('/polution'); // Navigate to /pollution route
+    router.push('/polution');
   };
-  
+  const handleAbout = () => {
+    router.push('/about');
+  };
+  const handleLearn = () => {
+    router.push('/learn');
+  };
+  const handleHome = () => {
+    router.push('/')
+  };
+  const handleFeedBack = () =>{
+    router.push('/feedback')
+  }
+
   useEffect(() => {
     let phi = 0;
+    const Markers = DEFAULT_CITIES.map((city) => ({
+      location: [city.lat, city.lon] as [number, number],
+      size: 0.03,
+    }));
+
+    console.log(Markers);
 
     if (canvasRef.current) {
-      const markers = DEFAULT_CITIES.map((city) => ({
-        location: [city.lat, city.lon] as [number, number], // Ensures the location is typed as a tuple
-        size: 0.03, // You can adjust this size or make it dynamic based on population or another factor
-      }));
-
       const globe = createGlobe(canvasRef.current, {
         devicePixelRatio: 2,
         width: 450 * 2,
@@ -27,13 +40,13 @@ export default function HomePage() {
         phi: 0,
         theta: 0,
         dark: 0.9,
-        diffuse: 3.0,
-        mapSamples: 26000,
+        diffuse: 1.2,
+        mapSamples: 15000,
         mapBrightness: 15,
         baseColor: [0.5, 0.5, 0.5],
         markerColor: [0.1, 0.8, 1],
-        glowColor: [1, 1, 1],
-        markers: markers,
+        glowColor: [0, 1, 0],
+        markers: Markers,
         onRender: (state: any) => {
           state.phi = phi;
           phi += 0.004;
@@ -47,33 +60,44 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-[#222222]">
-      {/* Top section */}
-      <div className="flex justify-between items-center p-6 bg-[#222222] rounded-b-lg shadow-md">
-        {/* Header buttons on the left (moved 200px to the right) */}
-        <div className="flex space-x-4 ml-[200px]">
-          <button className="bg-transparent text-white border-2 border-white py-2 px-6 rounded-full hover:bg-white hover:text-black transition-all duration-500 ease-in-out transform hover:scale-105 glow-effect">
-            Home
-          </button>
-          <button className="bg-transparent text-white border-2 border-white py-2 px-6 rounded-full hover:bg-white hover:text-black transition-all duration-500 ease-in-out transform hover:scale-105 glow-effect">
-            Learn
-          </button>
-          <button className="bg-transparent text-white border-2 border-white py-2 px-6 rounded-full hover:bg-white hover:text-black transition-all duration-500 ease-in-out transform hover:scale-105 glow-effect">
-            About Us
-          </button>
-        </div>
+    <div className="flex flex-col min-h-screen bg-[#222222] overflow-hidden">
+      {/* Top section - Modern Glassy Header */}
+      <div className="sticky top-0 z-50 backdrop-blur-2xl bg-[#003314]/30 border-b border-white/10 shadow-lg">
+        <div className="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 lg:px-20 py-4 md:py-5 gap-4 max-w-screen-2xl mx-auto">
+          {/* Logo/Brand */}
+          <div className="text-2xl md:text-3xl font-bold font-montserrat text-white tracking-wide order-1 md:order-1 hover:scale-105 transition-transform duration-300">
+            TERRA LENS
+          </div>
 
-        {/* Logo on the right (moved 200px to the left) */}
-        <div className="text-3xl font-extrabold text-white transition-all transform hover:scale-105 mr-[200px] glow-effect">
-          TERRA LENS
+          {/* Navigation */}
+          <nav className="flex gap-1 md:gap-2 order-2 md:order-2">
+            <button className="relative px-4 md:px-6 py-2 text-white font-montserrat font-medium text-sm md:text-base rounded-full backdrop-blur-md bg-white/5 hover:bg-white/20 border border-white/10 hover:border-white/30 transition-all duration-300 group overflow-hidden" onClick={handleHome}>
+              <span className="relative z-10">Home</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+            </button>
+            <button className="relative px-4 md:px-6 py-2 text-white font-montserrat font-medium text-sm md:text-base rounded-full backdrop-blur-md bg-white/5 hover:bg-white/20 border border-white/10 hover:border-white/30 transition-all duration-300 group overflow-hidden" onClick={handleLearn}>
+              <span className="relative z-10">Learn</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+            </button>
+            <button className="relative px-4 md:px-6 py-2 text-white font-montserrat font-medium text-sm md:text-base rounded-full backdrop-blur-md bg-white/5 hover:bg-white/20 border border-white/10 hover:border-white/30 transition-all duration-300 group overflow-hidden" onClick={handleAbout}>
+              <span className="relative z-10">About Us</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+            </button>
+            <button className="relative px-4 md:px-6 py-2 text-white font-montserrat font-medium text-sm md:text-base rounded-full backdrop-blur-md bg-white/5 hover:bg-white/20 border border-white/10 hover:border-white/30 transition-all duration-300 group overflow-hidden" onClick={handleFeedBack}>
+              <span className="relative z-10">Feedback</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+            </button>
+          </nav>
         </div>
       </div>
 
       {/* Main content */}
-      <div className="flex flex-grow justify-between items-center p-6 space-x-10">
-        {/* Left: Globe (moved 200px to the right) */}
-        <div className="flex items-center justify-center w-1/2 ml-[200px]">
-          <div className="bg-[#222222] rounded-lg w-full max-w-lg h-110">
+      <div className="flex flex-col lg:flex-row flex-grow justify-center lg:justify-between items-center p-4 md:p-6 lg:p-10 gap-8 lg:gap-12">
+        {/* Left: Globe */}
+        <div className="flex items-center justify-center w-full lg:w-1/2 lg:ml-8 xl:ml-[200px] relative"
+          style={{ animation: 'fadeInScale 0.8s ease-out' }}
+        >
+          <div className="relative w-full max-w-md lg:max-w-lg">
             <canvas
               ref={canvasRef}
               style={{
@@ -82,60 +106,112 @@ export default function HomePage() {
                 maxWidth: '100%',
                 aspectRatio: '1',
               }}
+              className="rounded-2xl"
             />
           </div>
         </div>
 
         {/* Right: Our Maps Section */}
-        <div className="flex flex-col space-y-6 w-1/2 ml-[200px] sm:w-full md:w-1/2">
-          <div className="bg-[#222222] p-6 rounded-xl w-full max-w-sm h-auto border-2 border-white">
-            {/* Our Maps Text */}
-            <div className="text-white text-2xl font-semibold mb-6 text-center">
+        <div className="flex flex-col gap-6 w-full lg:w-1/2 lg:mr-8 xl:mr-[200px] px-4 md:px-0"
+          style={{ animation: 'slideInRight 0.8s ease-out' }}
+        >
+          {/* Glass container wrapping everything */}
+          <div className="backdrop-blur-xl bg-white/5 border-2 border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl hover:bg-white/10 transition-all duration-700 w-full">
+            <div className="text-white text-2xl md:text-3xl font-bold mb-6 text-center font-montserrat bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
               Our Maps
             </div>
 
-            {/* Square 1 */}
-            <div className="flex justify-center mb-6">
+            <div className="flex flex-col gap-5">
+              {/* Pollution Map Card */}
               <div
-                className="bg-[#222222] p-4 rounded-lg w-full max-w-sm h-48 transform hover:scale-105 glow-effect transition-all duration-500 ease-in-out relative"
+                className="relative rounded-2xl overflow-hidden h-44 md:h-52 lg:h-56 transform hover:scale-105 hover:-translate-y-2 transition-all duration-700 ease-out shadow-xl  cursor-pointer group"
                 onClick={handleClick}
+                style={{ animation: 'fadeInUp 0.6s ease-out 0.2s backwards' }}
               >
-                {/* Image covering the whole square */}
                 <img
                   src="firstMap.png"
-                  alt="Image 1"
-                  className="w-full h-full object-cover rounded-lg z-0"
+                  alt="Pollution Map"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                {/* Text content with slight padding and background */}
-                <div className="absolute inset-0 bg-transparent bg-opacity-50 p-4 flex flex-col items-center justify-center rounded-lg z-10">
-                  <p className="text-black text-xl font-semibold mb-4">Polution Map</p>
-                  <p className="text-black text-sm">Worldwide polution map index</p>
+                {/* Glassmorphism overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 backdrop-blur-md bg-white/10 border-t border-white/20 transition-all duration-700 group-hover:backdrop-blur-lg group-hover:bg-white/20">
+                    <p className="text-white text-lg md:text-xl font-bold mb-1 transition-all duration-500 group-hover:translate-x-2 font-montserrat">
+                      Pollution Map
+                    </p>
+                    <p className="text-white/90 text-sm md:text-base transition-all duration-500 group-hover:text-white font-montserrat">
+                      Worldwide pollution map index
+                    </p>
+                  </div>
                 </div>
+                {/* Animated border */}
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-[#003314] transition-all duration-700"></div>
               </div>
-            </div>
 
-            {/* Square 2 */}
-            <div className="flex justify-center mb-6">
+              {/* Heat Map Card */}
               <div
-                className="bg-[#222222] p-4 rounded-lg w-full max-w-sm h-48 transform hover:scale-105 glow-effect transition-all duration-500 ease-in-out relative"
+                className="relative rounded-2xl overflow-hidden h-44 md:h-52 lg:h-56 transform hover:scale-105 hover:-translate-y-2 transition-all duration-700 ease-out shadow-xl cursor-pointer group"
                 onClick={handleClick}
+                style={{ animation: 'fadeInUp 0.6s ease-out 0.4s backwards' }}
               >
-                {/* Image covering the whole square */}
                 <img
                   src="map.png"
-                  alt="Image 1"
-                  className="w-full h-full object-cover rounded-lg z-0"
+                  alt="Heat Map"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                {/* Text content with slight padding and background */}
-                <div className="absolute inset-0 bg-transparent bg-opacity-50 p-4 flex flex-col items-center justify-center rounded-lg z-10">
-                  <p className="text-black text-xl font-semibold mb-4">Heat Map</p>
-                  <p className="text-black text-sm">A detailed description of Vaults and Coats...</p>
+                {/* Glassmorphism overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 backdrop-blur-md bg-white/10 border-t border-white/20 transition-all duration-700 group-hover:backdrop-blur-lg group-hover:bg-white/20">
+                    <p className="text-white text-lg md:text-xl font-bold mb-1 transition-all duration-500 group-hover:translate-x-2 font-montserrat">
+                      Heat Map
+                    </p>
+                    <p className="text-white/90 text-sm md:text-base transition-all duration-500 group-hover:text-white font-montserrat">
+                      Urban heat island visualization
+                    </p>
+                  </div>
                 </div>
+                {/* Animated border */}
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-[#003314] transition-all duration-700"></div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeInScale {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }
